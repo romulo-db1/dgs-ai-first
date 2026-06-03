@@ -1,0 +1,13 @@
+[project]
+name = "dgs-ai-first"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.5.9",
+    "markdown-it-py>=4.2.0",
+    "numpy>=2.4.6",
+    "scikit-learn>=1.9.0",
+    "sentence-transformers>=5.5.1",
+]
