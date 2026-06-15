@@ -6,7 +6,7 @@
 
 **Perfil:** Configura a infraestrutura de agentes (MCP), implementa specs com SDD, e define a estratégia de skills. Usa Copilot como ferramenta de implementação mantendo julgamento próprio.
 
-**Ferramentas esperadas:** Claude (chat) em todos; GitHub Copilot nos exercícios 2.2 e 2.3.
+**Ferramentas esperadas:** Claude (chat) em todos; GitHub Copilot nos exercícios 2.1 (agente com os MCP servers ativos), 2.2 e 2.3.
 
 ---
 
@@ -16,11 +16,11 @@
 
 | Critério | Score 3 | Red flag (≤ 1) |
 |----------|---------|-----------------|
-| 5 servers mapeados | GitHub, AI Search, OpenAI, DevOps, Confluence — com tools/resources/permissões para cada | < 3 servers ou sem distinção tools/resources |
-| Least privilege | Cada server com permissões mínimas. Ex: Confluence = read-only | Tudo com acesso total |
-| Riscos de segurança específicos | Ex: "Confluence expõe dados do cliente; agente local pode enviar a modelo cloud" | "Alguém pode hackear" |
-| .mcp.json válido | Sintaticamente correto, coerente com mapeamento, gerado com evidência do Copilot | Ausente ou com erros |
-| Referencia Anexo C | Usa o exemplo de configuração do Anexo C como ponto de partida | Ignora a referência |
+| Mapeamento necessidade → server local | Cada necessidade (código/specs/skills, docs de negócio, corpus de retrieval, histórico, memória) mapeada a um *reference server* local e gratuito (filesystem, git, memory, everything), com tools/resources e escopo | Usa servers pagos/externos (Azure, Confluence, GitHub remoto); < 3 servers; ou sem distinção tools/resources |
+| Least privilege concreto | filesystem com escopo mínimo de pastas; `docs/novatech/` e `data/retrieval-corpus/` como read-only; justificativa por server | Escopo amplo demais; fontes de negócio com escrita; sem justificativa |
+| Evidência de uso real | Servers no ar: o agente lê um doc de `docs/novatech/`, recupera um chunk de `data/retrieval-corpus/` (coerente com o mapa do Anexo B) e lê o histórico via git | Só o arquivo de config, sem evidência de execução |
+| Riscos de segurança do setup local | Ex: filesystem com escopo amplo expõe `.env`/segredos; server com escrita deixa o agente alterar arquivos sem revisão | "Alguém pode hackear" |
+| `.mcp/mcp.json` válido e coerente | Sintaticamente correto, coerente com o mapeamento/escopos, partindo do exemplo do Anexo C | Ausente, com erros, ou inconsistente com o mapeamento |
 
 ---
 

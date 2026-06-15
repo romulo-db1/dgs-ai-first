@@ -56,7 +56,7 @@ D5 — Aplicabilidade ao Projeto: Conectado ao NovaTech? Referencia ADRs e decis
 
 REGRAS OBRIGATÓRIAS:
 - Consulte o checklist específico do exercício na skill do papel.
-- Exercícios que pedem teste com Copilot: verificar se há evidência real de geração, avaliação do que foi seguido/ignorado, e iteração. Sem evidência → D2 ≤ 1.
+- Exercícios que pedem execução real — teste com Copilot (TL 2.1/2.3), MCP servers locais no ar (Dev 2.1) e health check (TL 2.2): verificar a evidência (geração/avaliação/iteração; ou agente lendo doc/chunk/git; ou saída do health check). Sem evidência → D2 ≤ 1.
 - Exercícios que pedem iteração (v1 → v2): verificar diferença concreta entre versões. V1 ≈ V2 → D2 ≤ 1.
 - AGENTS.md ou skills narrativos em vez de prescritivos → D3 ≤ 1.
 - Artefatos que ignoram decisões do cenário 1 (ADRs, context budget) → D5 ≤ 2.
@@ -154,6 +154,6 @@ INFORMAÇÕES DO EXERCÍCIO:
 
 ## Notas
 
-**Diferença principal vs cenário 1:** O cenário 2 produz artefatos que serão consumidos por agentes (AGENTS.md, skills, .mcp.json, specs SDD). A avaliação precisa verificar não apenas se o conteúdo está correto, mas se está em formato que um agente consegue processar. A seção "Verificação de Artefatos Machine-Readable" no formato de resposta existe por isso.
+**Diferença principal vs cenário 1:** O cenário 2 produz artefatos que serão consumidos por agentes (AGENTS.md, skills, `.mcp/mcp.json`, specs SDD). A avaliação precisa verificar não apenas se o conteúdo está correto, mas se está em formato que um agente consegue processar. A seção "Verificação de Artefatos Machine-Readable" no formato de resposta existe por isso.
 
-**Sobre evidência de teste com Copilot:** Três exercícios (TL 2.1, TL 2.3, e indiretamente Dev 2.2) pedem teste real com Copilot. A evidência pode ser: screenshots, exports de chat, ou transcrição dos prompts/completions. Sem evidência, o avaliador humano deve questionar — o LLM não tem como verificar autenticidade de prints.
+**Sobre evidência de execução real:** Vários exercícios exigem evidência de que algo de fato rodou — TL 2.1 e TL 2.3 (teste com Copilot), Dev 2.2 (revisão do código gerado), Dev 2.1 (MCP servers locais no ar: o agente lendo um doc de `docs/novatech/`, recuperando um chunk e lendo o git) e TL 2.2 (health check executado, com saída). A evidência pode ser screenshots, exports de chat ou transcrição/saída de terminal. Sem evidência, o avaliador humano deve questionar — o LLM não tem como verificar autenticidade de prints.

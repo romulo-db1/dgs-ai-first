@@ -1,6 +1,6 @@
 # Anexo C — Estrutura do Repositório NovaTech Assistant
 
-> **Nota para o participante:** A estrutura abaixo representa o repositório `db1/novatech-assistant` no início da fase de estruturação. O repositório foi criado pelo Tech Lead com a estrutura base. As pastas existem, mas a maioria dos arquivos ainda precisa ser criada — essa é a tarefa desta fase.
+> **Nota para o participante:** A estrutura abaixo representa o repositório **local** `novatech-assistant` no início da fase de estruturação. O prefixo `db1/` é apenas narrativo (na operação real a DB1 hospedaria na sua organização) — **nesta fase não há remoto, push, GitHub nem Azure**. Use o **Anexo D — Starter Repo**, que já vem com esta árvore, com `git init` feito e com as pastas de dados (`docs/novatech/` e `data/retrieval-corpus/`) semeadas a partir dos Anexos A e B. As pastas existem, mas a maioria dos arquivos ainda precisa ser criada — essa é a tarefa desta fase.
 
 ---
 
@@ -177,33 +177,46 @@ Nomenclatura: `NNNN-titulo-da-decisao.md` (ex: `0001-escolha-azure-openai.md`). 
 | MCP config | Não criado |
 | Código-fonte | Scaffold básico (Azure Functions configurado, nenhuma lógica implementada) |
 | Testes | Nenhum |
-| Infraestrutura | Bicep com recursos provisionados em dev (AI Search, OpenAI, Functions, Cosmos) |
+| Infraestrutura | Definições Bicep presentes como **estado narrativo** — nenhum recurso Azure real é provisionado ou necessário nesta fase |
 | CI/CD | Pipeline básico (lint + build) |
 
 ---
 
-## Exemplo mínimo de configuração MCP (`.mcp/mcp.json`)
+## Exemplo de configuração MCP (`.mcp/mcp.json`) — servers locais e gratuitos
 
-> Para referência nos exercícios que pedem configuração de MCP servers. Este é o formato esperado — o participante deve completar com os servers necessários.
+> Todos os servers abaixo são *reference servers* mantidos pelo protocolo, rodam localmente via `npx`/`uvx` e **não dependem de nenhum serviço pago ou externo**. Eles cobrem as necessidades do projeto sem Azure, Confluence ou GitHub. Este é o formato esperado — o participante define os escopos no exercício Dev 2.1.
 
 ```json
 {
   "mcpServers": {
-    "github": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
-      }
-    },
     "filesystem": {
-      "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./src", "./specs", "./skills"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem",
+               "./src", "./specs", "./skills", "./docs", "./data"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "."]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    },
+    "everything": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everything"]
     }
   }
 }
 ```
 
-**Nota:** O exemplo acima mostra apenas 2 servers (GitHub e filesystem). O projeto NovaTech precisa de servers adicionais para Azure AI Search, Azure OpenAI, Azure DevOps e Confluence. O participante deve mapear e configurar os que faltam.
+| Necessidade no projeto | Server | Aponta para |
+|---|---|---|
+| Ler/editar código, specs, skills | `filesystem` | `./src ./specs ./skills` |
+| Ler documentação de negócio da NovaTech (era Confluence) | `filesystem` | `./docs/novatech/` (Anexo A) |
+| "Recuperar" chunks (era Azure AI Search) | `filesystem` | `./data/retrieval-corpus/` (Anexo B) |
+| Histórico, diff e branches do repo (era GitHub) | `git` | repositório local |
+| Glossário/linguagem ubíqua e decisões persistentes | `memory` | grafo local |
+| Explorar primitivas de MCP (tools/resources/prompts) | `everything` | — (aprendizado) |
+
+**Nota:** os nomes de pacote e comandos (`npx @modelcontextprotocol/server-...`, `uvx mcp-server-...`) evoluem — confirme no README oficial do repositório `modelcontextprotocol/servers` antes de configurar. Ler a documentação do server antes de ligá-lo faz parte do exercício. O server de GitHub foi arquivado no upstream e exigiria conta/token externos; por isso o repositório é tratado localmente via `filesystem` + `git`.
